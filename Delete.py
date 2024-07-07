@@ -11,11 +11,9 @@ def main():
     
     print("Exclusão realizada com sucesso!")
 
-def close_connection(cursor, connection):
-    if cursor is not None:
-        cursor.close()
-    if connection is not None:  
-        connection.close()
+def close_connection(cursor, conexao):
+    cursor.close()
+    conexao.close()
 
 if __name__ == "__main__":
     main()
