@@ -1,42 +1,29 @@
-import mysql.connector
-from config import db_config
+from database_connection import create_connection
 
-db_host = db_config['host']
-db_user = db_config['user']
-db_password = db_config['password']
-db_name = db_config['database']
+def main():
+    connection = create_connection()
+    cursor = connection.cursor()
 
-conexao = mysql.connector.connect(
-    host = db_host,
-    user = db_user,
-    password = db_password,
-    database = db_name
-)
+    print("conectei ao banco de dados")
 
-print("conectei ao banco de dados")
+    #Inserir no banco de dados
 
-cursor = conexao.cursor()
+    sql = "INSERT INTO cliente (cliente_id, nome, email) VALUES (%s, %s, %s)"
+    valores = [
+        (9,'Miguel Rodrigues', ' miguel.rodrigues@gmail.com' )
+        #(6, 'Sofia Martins', 'sofia.martins@outlook.com'),
+        #(7, 'José Ferreira', 'jose.ferreira@uol.com.br')
+    ]
 
-#Inserir no banco de dados
-
-sql = "INSERT INTO cliente (cliente_id, nome, email) VALUES (%s, %s, %s)"
-valores = (1, 'Joao', 'Joao@gmail.com')
-
-cursor.execute(sql, valores)
-
-conexao.commit()
+    for valor in valores:
+        cursor.execute(sql, valor)
+        connection.commit()
 
 print("Inserção realizada com sucesso!")
 
+def close_connection(cursor, conexao):
+    cursor.close()
+    conexao.close()
 
-# sql_select = 'SELECT * FROM cliente'
-
-# cursor.execute(sql_select)
-# resultados = cursor.fetchall()
-
-# for resultado in resultados:
-#     cliente_id, nome, email = resultado
-#     print(f"ID: {cliente_id}, Nome: {nome}, email:{email}")
-
-#cursor.close()
-conexao.close()
+if __name__ == "__main__":
+    main()
